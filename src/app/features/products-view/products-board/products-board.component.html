@@ -1,1 +1,61 @@
-<p>items-board works!</p>
+<div class="w-full flex flex-col justify-start">
+  <div class="self-start py-2 w-full flex items-center justify-between">
+    <div class="text-gray-800 text-2xl font-medium">Management Tool</div>
+    <div class="action-section flex gap-2 items-center">
+      <button mat-icon-button (click)="sidebarVisible$.set(true)">
+        <mat-icon>list</mat-icon>
+      </button>
+      <button mat-icon-button (click)="sidebarVisible$.set(true)">
+        <mat-icon>apps</mat-icon>
+      </button>
+      <button mat-icon-button (click)="sidebarVisible$.set(true)">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  @if (!productLoading$() && productLoaded$()) {
+    <div
+      class="products-board w-full"
+      [ngClass]="
+        viewMode$() === ProductViewMode.List ? 'list-view' : 'grid-view'
+      "
+    >
+      @for (product of productsToShow$(); track product) {
+        <app-product
+          class="product-item"
+          [ngClass]="
+            viewMode$() === ProductViewMode.List ? 'list-view' : 'grid-view'
+          "
+          [product]="product"
+          [mode]="viewMode$()"
+        ></app-product>
+      }
+    </div>
+  } @else {
+    @for (_ of [].constructor(pageSize$()); track _) {
+      <p-skeleton class="p-1" width="290px" height="48px"></p-skeleton>
+    }
+  }
+  <div class="footer py-2 flex items-center justify-end">
+    <mat-paginator
+      style="background: transparent; font-size: 16px"
+      [length]="allProducts$().length"
+      [pageSize]="pageSize$()"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="handlePageEvent($event)"
+    >
+    </mat-paginator>
+  </div>
+</div>
+
+<p-sidebar
+  [visible]="sidebarVisible$()"
+  (visibleChange)="sidebarVisible$.set($event)"
+  [position]="'right'"
+>
+  <app-product-form
+    [product]="selectedProductToEdit$()"
+    [mode]="viewMode$()"
+  ></app-product-form>
+</p-sidebar>

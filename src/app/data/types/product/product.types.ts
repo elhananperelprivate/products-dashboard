@@ -2,11 +2,27 @@ export interface Product {
   id: number;
   title: string;
   price: number;
-  description: string;
-  category: string;
+  description?: string;
+  category?: string;
   image: string;
-  rating: {
+  rating?: {
     rate: number;
     count: number;
   };
 }
+
+export const ProductViewMode = {
+  Grid: 'grid',
+  List: 'list',
+};
+
+export type ProductViewMode =
+  (typeof ProductViewMode)[keyof typeof ProductViewMode];
+
+export const ProductFormMode = {
+  Create: 'create',
+  Edit: 'edit',
+};
+
+export type ProductFormMode =
+  (typeof ProductFormMode)[keyof typeof ProductFormMode];

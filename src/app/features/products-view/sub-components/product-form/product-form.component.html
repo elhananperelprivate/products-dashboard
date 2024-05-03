@@ -1,0 +1,97 @@
+<div class="w-full h-full flex flex-col gap-3 justify-center px-4">
+  <div class="text-2xl pb-4">
+    {{ mode() === ProductFormMode.Edit ? "Edit Product" : "Add Product" }}
+  </div>
+
+  @if (productForm) {
+    <form [formGroup]="productForm" class="w-full flex flex-col gap-4 p-1">
+      <div class="flex flex-col gap-2 w-full">
+        <mat-label class="text-lg">Title</mat-label>
+        <mat-form-field class="w-full form-field" appearance="outline">
+          <input matInput formControlName="title" required />
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col gap-2 w-full">
+        <mat-label class="text-lg">Description</mat-label>
+        <mat-form-field class="w-full form-field" appearance="outline">
+          <textarea
+            matInput
+            formControlName="description"
+            [placeholder]="
+              mode() === ProductFormMode.Edit
+                ? product()?.description || ''
+                : 'Add description here...'
+            "
+          ></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="flex gap-2 items-center justify-center w-full">
+        <mat-label class="w-fit text-lg whitespace-nowrap"
+          >Select Category</mat-label
+        >
+        <mat-form-field class="w-full form-field" appearance="outline">
+          <mat-select formControlName="category">
+            @for (category of categories; track category) {
+              <mat-option [value]="category">{{ category }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        @if (image) {
+          <div class="flex gap-2">
+            <div class="image-container relative py-2">
+              <img
+                [src]="image"
+                alt="image"
+                style="width: 100px; height: 100px"
+              />
+              <button
+                mat-icon-button
+                class="delete-button absolute top-0 right-0"
+                (click)="image = ''"
+              >
+                <i class="fa-solid fa-times text-red-500 text-xs"></i>
+              </button>
+            </div>
+          </div>
+        }
+
+        <button
+          mat-icon-button
+          class="image-icon"
+          [matTooltip]="'Attach an image to your '"
+          matTooltipPosition="above"
+          (click)="fileInput.click()"
+        >
+          <mat-icon>collections</mat-icon>
+        </button>
+
+        <!-- File input -->
+        <input
+          #fileInput
+          id="fileInput"
+          type="file"
+          accept="image/*"
+          (change)="onImageSelect($event)"
+          style="display: none"
+        />
+      </div>
+      <div class="self-center w-fit">
+        <button
+          mat-raised-button
+          [disabled]="productForm.invalid"
+          (click)="submitForm()"
+          color="primary"
+          type="submit"
+          class="px-[32px] py-[18px] text-lg shadow-2"
+        >
+          {{ mode() === ProductFormMode.Edit ? "Update" : "Create" }}
+        </button>
+      </div>
+    </form>
+  }
+</div>

@@ -1,1 +1,40 @@
-<p>item works!</p>
+<div class="flex items-center justify-start gap-2 h-full w-full p-2">
+  <div
+    class="image-section"
+    [ngClass]="
+      mode() === ProductViewMode.List ? 'h-full w-[40px]' : 'h-[60%] w-[160px]'
+    "
+  >
+    @defer {
+      <img
+        [src]="product().image"
+        alt="{{ product().title }}"
+        class="product-image"
+      />
+    } @placeholder {
+      <p-skeleton
+        class="h-full w-full"
+        [shape]="'square'"
+      ></p-skeleton>
+    }
+  </div>
+  <div
+    class="flex items-center justify-between gap-4 w-full"
+    [ngClass]="
+      mode() === ProductViewMode.List ? 'flex-row ps-1' : 'flex-col h-[40%]'
+    "
+  >
+    <div
+      class="text-base font-sans font-medium truncate"
+      [ngClass]="mode() === ProductViewMode.List ? 'w-[60%]' : 'w-full'"
+    >
+      {{ product().title }}
+    </div>
+    <div [ngClass]="mode() === ProductViewMode.List ? 'w-[20%]' : 'w-full'">
+      {{ product().category }}
+    </div>
+    <div [ngClass]="mode() === ProductViewMode.List ? 'w-[20%]' : 'w-full'">
+      {{ product().price + "$" }}
+    </div>
+  </div>
+</div>

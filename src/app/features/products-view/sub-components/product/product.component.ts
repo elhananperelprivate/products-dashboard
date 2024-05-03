@@ -1,12 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, input, model } from '@angular/core';
+import { Product, ProductViewMode } from '../../../../data';
+import { NgClass } from '@angular/common';
+import {SkeletonModule} from "primeng/skeleton";
 
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [],
+  imports: [NgClass, SkeletonModule],
   templateUrl: './product.component.html',
-  styleUrl: './product.component.scss'
+  styleUrl: './product.component.scss',
 })
 export class ProductComponent {
+  product = input.required<Product>();
+  mode = input.required<ProductViewMode>();
 
+  protected ProductViewMode = ProductViewMode;
 }
