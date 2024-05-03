@@ -1,18 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ProductService } from '../../services';
-import {
-  catchError,
-  exhaustMap,
-  map,
-  mergeMap,
-  of,
-  tap,
-  withLatestFrom,
-} from 'rxjs';
+import { catchError, exhaustMap, map, of, withLatestFrom } from 'rxjs';
 import { productActions } from './product.actions';
 import { Store } from '@ngrx/store';
-import { selectAllProducts, selectProductLoaded } from './product.selectors';
+import { selectAllProducts } from './product.selectors';
 
 @Injectable()
 export class ProductEffects {
@@ -36,6 +28,34 @@ export class ProductEffects {
           ),
         );
       }),
+    ),
+  );
+
+  addProduct$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(productActions.addProduct),
+      exhaustMap(({ product }) =>
+        this.productService.addProduct(product).pipe(
+          map((product) => productActions.addProductSuccess({ product })),
+          catchError((error) =>
+            of(productActions.addProductFailure({ error })),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  updateProduct$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(productActions.updateProduct),
+      exhaustMap(({ product }) =>
+        this.productService.updateProduct(product).pipe(
+          map((product) => productActions.updateProductSuccess({ product })),
+          catchError((error) =>
+            of(productActions.updateProductFailure({ error })),
+          ),
+        ),
+      ),
     ),
   );
 }

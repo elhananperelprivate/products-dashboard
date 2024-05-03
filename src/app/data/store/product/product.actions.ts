@@ -1,4 +1,4 @@
-import { createActionGroup, props, emptyProps } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Product } from '../../types';
 
 const getAllProductEvents = {

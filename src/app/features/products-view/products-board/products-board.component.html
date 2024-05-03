@@ -21,11 +21,11 @@
       <mat-icon>search</mat-icon>
     </button>
     <input
-      type="text"
+      pInputText
       #inputField
       (input)="filterQuery$.set(inputField.value)"
-      class="w-full h-full pe-2"
       placeholder="Search By Name.."
+      class="ng-invalid ng-dirty w-full h-full pe-2 p-2 text-xl text-gray-800"
     />
   </div>
 
@@ -39,17 +39,26 @@
       @for (product of productsToShow$(); track product) {
         <app-product
           class="product-item"
-          [ngClass]="
-            viewMode$() === ProductViewMode.List ? 'list-view' : 'grid-view'
-          "
+          [ngClass]="{
+            'list-view': viewMode$() === ProductViewMode.List,
+            'grid-view': viewMode$() !== ProductViewMode.List,
+            'selected':
+              selectedProductToEdit$() &&
+              product.id === selectedProductToEdit$()?.id
+          }"
           [product]="product"
           [mode]="viewMode$()"
+          (click)="selectedProductToEdit$()?.id === product.id ?  selectedProductToEdit$.set(undefined): selectedProductToEdit$.set(product)"
         ></app-product>
       }
     </div>
   } @else {
     @for (_ of [].constructor(pageSize$()); track _) {
-      <p-skeleton class="p-1" [width]="viewMode$() === ProductViewMode.List ? '100%' : '160px'" height="48px"></p-skeleton>
+      <p-skeleton
+        class="p-1"
+        [width]="viewMode$() === ProductViewMode.List ? '100%' : '160px'"
+        height="48px"
+      ></p-skeleton>
     }
   }
   <div class="footer py-2 flex items-center justify-end">
@@ -71,7 +80,8 @@
   [style]="{ width: '30%', 'background-color': 'rgb(234,237,239)' }"
 >
   <app-product-form
-    [product]="selectedProductToEdit$()"
-    [mode]="viewMode$()"
+    [product$]="selectedProductToEdit$()"
+    [mode$]="selectedProductToEdit$() ? ProductFormMode.Edit : ProductFormMode.Create"
+    [(sideNavOpen$)]="sidebarVisible$"
   ></app-product-form>
 </p-sidebar>

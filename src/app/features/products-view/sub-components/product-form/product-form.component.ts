@@ -1,5 +1,14 @@
-import {Component, effect, inject, input, signal, Signal, WritableSignal} from '@angular/core';
-import { Product, ProductFormMode } from '../../../../data';
+import {
+  Component,
+  effect,
+  inject,
+  input,
+  model,
+  Output,
+  signal,
+  WritableSignal,
+} from '@angular/core';
+import { Product, productActions, ProductFormMode } from '../../../../data';
 import {
   FormBuilder,
   FormGroup,
@@ -7,17 +16,20 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { NgClass } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatInput } from '@angular/material/input';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Store } from '@ngrx/store';
-import {MatIcon} from "@angular/material/icon";
-import {DockModule} from "primeng/dock";
-import {ButtonModule} from "primeng/button";
-import {RippleModule} from "primeng/ripple";
+import { MatIcon } from '@angular/material/icon';
+import { DockModule } from 'primeng/dock';
+import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @Component({
   selector: 'app-product-form',
@@ -38,6 +50,10 @@ import {RippleModule} from "primeng/ripple";
     DockModule,
     ButtonModule,
     RippleModule,
+    DropdownModule,
+    InputTextModule,
+    InputTextareaModule,
+    NgStyle,
   ],
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.scss',
@@ -46,8 +62,9 @@ export class ProductFormComponent {
   private fb: FormBuilder = inject(FormBuilder);
   private store: Store = inject(Store);
 
-  mode = input.required<ProductFormMode>();
-  product = input<Product>();
+  mode$ = input.required<ProductFormMode>();
+  product$ = input<Product>();
+  sideNavOpen$ = model.required<boolean>();
 
   protected productForm: FormGroup;
   protected ProductFormMode = ProductFormMode;
@@ -55,13 +72,16 @@ export class ProductFormComponent {
   protected image$: WritableSignal<string> = signal('');
 
   constructor() {
-    effect(() => {
-      const mode = this.mode();
-      const productToUpdate = this.product();
-      if (mode) {
-        this.initForm(productToUpdate);
-      }
-    });
+    effect(
+      () => {
+        const mode = this.mode$();
+        const productToUpdate = this.product$();
+        if (mode) {
+          this.initForm(productToUpdate);
+        }
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   initForm(product?: Product) {
@@ -73,7 +93,7 @@ export class ProductFormComponent {
       description: [product?.description || ''],
       category: [product?.category || ''],
     });
-    this.image$.set(product?.image || '') ;
+    this.image$.set(product?.image || '');
   }
 
   onImageSelect(event: any) {
@@ -88,10 +108,15 @@ export class ProductFormComponent {
   }
 
   submitForm() {
-    if (this.productForm.valid) {
-      const product = this.productForm.value as Product;
+    if (this.productForm.valid && this.image$()) {
+      const product = { ...this.product$(), ...this.productForm.value } as Product;
       product.image = this.image$();
-      //this.store.dispatch(createProduct({ product }));
+      this.store.dispatch(
+        this.mode$() === ProductFormMode.Create
+          ? productActions.addProduct({ product })
+          : productActions.updateProduct({ product }),
+      );
+      this.sideNavOpen$.set(false);
     }
   }
 }

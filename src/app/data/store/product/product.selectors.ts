@@ -31,3 +31,8 @@ export const selectProductLoaded = createSelector(
   selectProductState,
   (state: IProductState) => state.loaded,
 );
+
+export const selectProductsLength = createSelector(
+  selectAllProducts,
+  (products) => products.length,
+);

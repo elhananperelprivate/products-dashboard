@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
   OnInit,
   signal,
@@ -11,6 +12,7 @@ import {
 import {
   Product,
   productActions,
+  ProductFormMode,
   ProductViewMode,
   selectAllProducts,
   selectProductLoaded,
@@ -31,7 +33,10 @@ import {
 } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { debounceTime, map } from 'rxjs';
+import { debounceTime } from 'rxjs';
+import { InputTextModule } from 'primeng/inputtext';
+import { PaginatorModule } from 'primeng/paginator';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-products-board',
@@ -50,6 +55,9 @@ import { debounceTime, map } from 'rxjs';
     MatButton,
     MatLabel,
     MatPrefix,
+    InputTextModule,
+    PaginatorModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './products-board.component.html',
   styleUrl: './products-board.component.scss',
@@ -71,21 +79,21 @@ export class ProductsBoardComponent implements OnInit {
   protected allProducts$: Signal<Product[]> =
     this.store.selectSignal(selectAllProducts);
 
-  protected filteredProducts$ = toSignal(
-    toObservable(this.filterQuery$).pipe(
-      debounceTime(300),
-      map((query) => query?.toLowerCase() || ''),
-      map((lcf: string) => {
-        const allProducts = this.allProducts$();
-        return lcf === ''
-          ? allProducts
-          : allProducts?.filter((product) =>
-              product.title.toLowerCase().includes(lcf),
-            ) || [];
-      }),
-    ),
-    { initialValue: [] },
+  protected filterQueryWithDebounce$ = toSignal(
+    toObservable(this.filterQuery$).pipe(debounceTime(300)),
+    { initialValue: '' },
   );
+
+  protected filteredProducts$ = computed(() => {
+    const query = this.filterQueryWithDebounce$();
+    const allProducts = this.allProducts$();
+    const lcf = query?.toLowerCase() || '';
+    return lcf === ''
+      ? allProducts
+      : allProducts?.filter((product) =>
+          product.title.toLowerCase().includes(lcf),
+        ) || [];
+  });
 
   protected productsToShow$: Signal<Product[]> = computed(() => {
     const allProducts = this.filteredProducts$();
@@ -98,9 +106,24 @@ export class ProductsBoardComponent implements OnInit {
     signal(undefined);
 
   protected ProductViewMode = ProductViewMode;
+  protected ProductFormMode = ProductFormMode;
 
   protected sidebarVisible$ = signal(false);
   pageSizeOptions: number[] = [5, 10];
+
+  constructor() {
+    effect(
+      () => {
+        const selectedProduct = this.selectedProductToEdit$();
+        if (selectedProduct) {
+          this.sidebarVisible$.set(true);
+        } else {
+          this.sidebarVisible$.set(false);
+        }
+      },
+      { allowSignalWrites: true },
+    );
+  }
 
   ngOnInit(): void {
     this.store.dispatch(productActions.getAllProducts());
@@ -110,4 +133,6 @@ export class ProductsBoardComponent implements OnInit {
     this.pageSize$.set(e.pageSize);
     this.currentPage$.set(e.pageIndex);
   }
+
+  protected readonly ProductFormComponent = ProductFormComponent;
 }

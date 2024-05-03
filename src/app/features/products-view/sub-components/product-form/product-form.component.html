@@ -1,43 +1,46 @@
 <div class="w-full h-full flex flex-col gap-3 pt-[20%] px-4">
   <div class="text-2xl pb-4">
-    {{ mode() === ProductFormMode.Edit ? "Edit Product" : "Add Product" }}
+    {{ mode$() === ProductFormMode.Edit ? "Edit Product" : "Add Product" }}
   </div>
 
   @if (productForm) {
     <form [formGroup]="productForm" class="w-full flex flex-col gap-4 p-1">
       <div class="flex flex-col gap-2 w-full">
         <mat-label class="text-lg">Title</mat-label>
-        <mat-form-field class="w-full form-field" appearance="outline">
-          <input matInput formControlName="title" required />
-        </mat-form-field>
+        <input
+          pInputText
+          formControlName="title"
+          id="title"
+          class="ng-invalid ng-dirty w-full h-[44px] p-2 text-xl text-gray-800"
+        />
       </div>
 
       <div class="flex flex-col gap-2 w-full">
         <mat-label class="text-lg">Description</mat-label>
-        <mat-form-field class="w-full form-field" appearance="outline">
-          <textarea
-            matInput
-            formControlName="description"
-            [placeholder]="
-              mode() === ProductFormMode.Edit
-                ? product()?.description || ''
-                : 'Add description here...'
-            "
-          ></textarea>
-        </mat-form-field>
+        <textarea
+          matInput
+          formControlName="description"
+          pInputTextarea
+          class="w-full h-[104px] p-2 text-lg text-gray-800"
+          [placeholder]="
+            mode$() === ProductFormMode.Edit
+              ? product$()?.description || ''
+              : 'Add description here...'
+          "
+        ></textarea>
       </div>
 
       <div class="flex gap-2 items-center justify-center w-full">
         <mat-label class="w-fit text-lg whitespace-nowrap"
           >Select Category</mat-label
         >
-        <mat-form-field class="w-full form-field" appearance="outline">
-          <mat-select formControlName="category">
-            @for (category of categories; track category) {
-              <mat-option [value]="category">{{ category }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+        <p-dropdown
+          formControlName="category"
+          [options]="categories"
+          class="w-full"
+          [ngStyle]="{ width: '--webkit-fill-available' }"
+          placeholder="Select a Category.."
+        />
       </div>
 
       <div class="flex flex-col gap-1">
@@ -90,7 +93,7 @@
           type="submit"
           class="px-[32px] py-[18px] text-lg shadow-2"
         >
-          {{ mode() === ProductFormMode.Edit ? "Update" : "Create" }}
+          {{ mode$() === ProductFormMode.Edit ? "Update" : "Create" }}
         </button>
       </div>
     </form>
