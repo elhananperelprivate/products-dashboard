@@ -128,6 +128,12 @@ export class ProductsBoardComponent implements OnInit {
       },
       { allowSignalWrites: true },
     );
+    effect(() => {
+      const filterQuery = this.filterQueryWithDebounce$();
+      if (filterQuery) {
+        this.currentPage$.set(0);
+      }
+    }, { allowSignalWrites: true});
   }
 
   ngOnInit(): void {

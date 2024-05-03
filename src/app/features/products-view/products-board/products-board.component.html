@@ -73,6 +73,7 @@
       style="background: transparent; font-size: 16px"
       [length]="filteredProducts$().length"
       [pageSize]="pageSize$()"
+      [pageIndex]="currentPage$()"
       [pageSizeOptions]="pageSizeOptions"
       (page)="handlePageEvent($event)"
     >
