@@ -1,4 +1,4 @@
-import { Component, effect, inject, input } from '@angular/core';
+import {Component, effect, inject, input, signal, Signal, WritableSignal} from '@angular/core';
 import { Product, ProductFormMode } from '../../../../data';
 import {
   FormBuilder,
@@ -15,6 +15,9 @@ import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Store } from '@ngrx/store';
 import {MatIcon} from "@angular/material/icon";
+import {DockModule} from "primeng/dock";
+import {ButtonModule} from "primeng/button";
+import {RippleModule} from "primeng/ripple";
 
 @Component({
   selector: 'app-product-form',
@@ -32,6 +35,9 @@ import {MatIcon} from "@angular/material/icon";
     MatTooltip,
     MatButton,
     MatIcon,
+    DockModule,
+    ButtonModule,
+    RippleModule,
   ],
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.scss',
@@ -46,7 +52,7 @@ export class ProductFormComponent {
   protected productForm: FormGroup;
   protected ProductFormMode = ProductFormMode;
   protected categories: string[] = ['Men Clothing', 'Women Clothing', 'Other'];
-  protected image: string;
+  protected image$: WritableSignal<string> = signal('');
 
   constructor() {
     effect(() => {
@@ -67,7 +73,7 @@ export class ProductFormComponent {
       description: [product?.description || ''],
       category: [product?.category || ''],
     });
-    this.image = product?.image || '';
+    this.image$.set(product?.image || '') ;
   }
 
   onImageSelect(event: any) {
@@ -75,7 +81,7 @@ export class ProductFormComponent {
       const files = event.target.files;
       const reader = new FileReader();
       reader.onload = () => {
-        this.image = reader.result as string;
+        this.image$.set(reader.result as string);
       };
       reader.readAsDataURL(files[0]);
     }
@@ -84,7 +90,7 @@ export class ProductFormComponent {
   submitForm() {
     if (this.productForm.valid) {
       const product = this.productForm.value as Product;
-      product.image = this.image;
+      product.image = this.image$();
       //this.store.dispatch(createProduct({ product }));
     }
   }

@@ -30,6 +30,8 @@ import {
   MatPrefix,
 } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { debounceTime, map } from 'rxjs';
 
 @Component({
   selector: 'app-products-board',
@@ -69,15 +71,21 @@ export class ProductsBoardComponent implements OnInit {
   protected allProducts$: Signal<Product[]> =
     this.store.selectSignal(selectAllProducts);
 
-  protected filteredProducts$: Signal<Product[]> = computed(() => {
-    const allProducts = this.allProducts$();
-    const query = this.filterQuery$().toLowerCase();
-    return query === ''
-      ? allProducts
-      : allProducts?.filter((product) =>
-          product.title.toLowerCase().includes(query),
-        ) || [];
-  });
+  protected filteredProducts$ = toSignal(
+    toObservable(this.filterQuery$).pipe(
+      debounceTime(300),
+      map((query) => query?.toLowerCase() || ''),
+      map((lcf: string) => {
+        const allProducts = this.allProducts$();
+        return lcf === ''
+          ? allProducts
+          : allProducts?.filter((product) =>
+              product.title.toLowerCase().includes(lcf),
+            ) || [];
+      }),
+    ),
+    { initialValue: [] },
+  );
 
   protected productsToShow$: Signal<Product[]> = computed(() => {
     const allProducts = this.filteredProducts$();

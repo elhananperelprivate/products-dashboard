@@ -49,7 +49,7 @@
     </div>
   } @else {
     @for (_ of [].constructor(pageSize$()); track _) {
-      <p-skeleton class="p-1" width="290px" height="48px"></p-skeleton>
+      <p-skeleton class="p-1" [width]="viewMode$() === ProductViewMode.List ? '100%' : '160px'" height="48px"></p-skeleton>
     }
   }
   <div class="footer py-2 flex items-center justify-end">
@@ -68,6 +68,7 @@
   [visible]="sidebarVisible$()"
   (visibleChange)="sidebarVisible$.set($event)"
   [position]="'right'"
+  [style]="{ width: '30%', 'background-color': 'rgb(234,237,239)' }"
 >
   <app-product-form
     [product]="selectedProductToEdit$()"

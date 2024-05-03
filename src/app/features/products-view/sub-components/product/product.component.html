@@ -12,10 +12,7 @@
         class="product-image"
       />
     } @placeholder {
-      <p-skeleton
-        class="h-full w-full"
-        [shape]="'square'"
-      ></p-skeleton>
+      <p-skeleton class="h-full w-full" [shape]="'square'"></p-skeleton>
     }
   </div>
   <div
@@ -34,7 +31,7 @@
       {{ product().category }}
     </div>
     <div [ngClass]="mode() === ProductViewMode.List ? 'w-[20%]' : 'w-full'">
-      {{ product().price + "$" }}
+      {{ "$" + product().price }}
     </div>
   </div>
 </div>
