@@ -130,7 +130,8 @@ export class ProductsBoardComponent implements OnInit {
     );
     effect(() => {
       const filterQuery = this.filterQueryWithDebounce$();
-      if (filterQuery) {
+      const filterCategory = this.filterCategory$();
+      if (filterQuery || filterCategory) {
         this.currentPage$.set(0);
       }
     }, { allowSignalWrites: true});
