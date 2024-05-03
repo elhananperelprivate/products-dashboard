@@ -75,7 +75,7 @@
 
 <p-sidebar
   [visible]="sidebarVisible$()"
-  (visibleChange)="sidebarVisible$.set($event)"
+  (visibleChange)="sidebarVisible$.set($event);  !$event ? selectedProductToEdit$.set(undefined) : null"
   [position]="'right'"
   [style]="{ width: '30%', 'background-color': 'rgb(234,237,239)' }"
 >
