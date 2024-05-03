@@ -2,13 +2,13 @@
   <div
     class="image-section"
     [ngClass]="
-      mode() === ProductViewMode.List ? 'h-full w-[40px]' : 'h-[60%] w-[160px]'
+      mode$() === ProductViewMode.List ? 'h-full w-[40px]' : 'h-[60%] w-[160px]'
     "
   >
     @defer {
       <img
-        [src]="product().image"
-        alt="{{ product().title }}"
+        [src]="product$().image"
+        alt="{{ product$().title }}"
         class="product-image"
       />
     } @placeholder {
@@ -18,20 +18,27 @@
   <div
     class="flex items-center justify-between gap-4 w-full"
     [ngClass]="
-      mode() === ProductViewMode.List ? 'flex-row ps-1' : 'flex-col h-[40%]'
+      mode$() === ProductViewMode.List ? 'flex-row ps-1' : 'flex-col h-[40%]'
     "
   >
     <div
       class="text-base font-sans font-medium truncate"
-      [ngClass]="mode() === ProductViewMode.List ? 'w-[60%]' : 'w-full'"
+      [ngClass]="mode$() === ProductViewMode.List ? 'w-[60%]' : 'w-full'"
     >
-      {{ product().title }}
+      {{ product$().title }}
     </div>
-    <div [ngClass]="mode() === ProductViewMode.List ? 'w-[20%]' : 'w-full'">
-      {{ product().category }}
+    <div
+      class="flex items-center"
+      [ngClass]="mode$() === ProductViewMode.List ? 'w-[20%]' : 'w-full'"
+    >
+      <div
+        class=" w-fit h-full category-filter"
+        (click)="$event.preventDefault(); $event.stopPropagation(); filterCategory$.set(product$().category || '')"
+
+      >{{ product$().category }}</div>
     </div>
-    <div [ngClass]="mode() === ProductViewMode.List ? 'w-[20%]' : 'w-full'">
-      {{ "$" + product().price }}
+    <div [ngClass]="mode$() === ProductViewMode.List ? 'w-[20%]' : 'w-full'">
+      {{ "$" + product$().price }}
     </div>
   </div>
 </div>

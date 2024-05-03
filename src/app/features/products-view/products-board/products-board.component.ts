@@ -24,7 +24,7 @@ import { ProductComponent, ProductFormComponent } from '../sub-components';
 import { NgClass } from '@angular/common';
 import { SidebarModule } from 'primeng/sidebar';
 import { MatIcon } from '@angular/material/icon';
-import { MatButton, MatIconButton } from '@angular/material/button';
+import {MatButton, MatFabButton, MatIconButton} from '@angular/material/button';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import {
   MatFormField,
@@ -58,6 +58,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     InputTextModule,
     PaginatorModule,
     ReactiveFormsModule,
+    MatFabButton,
   ],
   templateUrl: './products-board.component.html',
   styleUrl: './products-board.component.scss',
@@ -70,6 +71,7 @@ export class ProductsBoardComponent implements OnInit {
   protected pageSize$ = signal(10);
   protected currentPage$ = signal(0);
   protected filterQuery$ = signal('');
+  protected filterCategory$ = signal('');
 
   protected productLoaded$: Signal<boolean> =
     this.store.selectSignal(selectProductLoaded);
@@ -86,13 +88,16 @@ export class ProductsBoardComponent implements OnInit {
 
   protected filteredProducts$ = computed(() => {
     const query = this.filterQueryWithDebounce$();
+    const categoryFilter = this.filterCategory$();
     const allProducts = this.allProducts$();
     const lcf = query?.toLowerCase() || '';
-    return lcf === ''
-      ? allProducts
-      : allProducts?.filter((product) =>
-          product.title.toLowerCase().includes(lcf),
-        ) || [];
+    return (
+      allProducts?.filter(
+        (product) =>
+          (lcf ? product.title.toLowerCase().includes(lcf) : true) &&
+          (categoryFilter ? product.category === categoryFilter : true),
+      ) || []
+    );
   });
 
   protected productsToShow$: Signal<Product[]> = computed(() => {

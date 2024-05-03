@@ -26,3 +26,12 @@ export const ProductFormMode = {
 
 export type ProductFormMode =
   (typeof ProductFormMode)[keyof typeof ProductFormMode];
+
+export const ProductCategory = {
+  Jewelery: 'jewelery',
+  Electronics: 'electronics',
+  Furniture: 'furniture',
+  MensClothing: 'men\'s clothing',
+  WomensClothing: 'women\'s clothing',
+};
+

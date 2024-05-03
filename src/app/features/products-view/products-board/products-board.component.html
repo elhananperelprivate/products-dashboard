@@ -2,6 +2,12 @@
   <div class="self-start w-full flex items-center justify-between">
     <div class="text-gray-800 text-2xl font-medium">Management Tool</div>
     <div class="action-section flex gap-2 items-center">
+      @if(filterCategory$()){
+        <button (click)="filterCategory$.set('')" mat-stroked-button>
+          <mat-icon>close</mat-icon>
+          {{ filterCategory$() }}
+        </button>
+      }
       <button mat-icon-button (click)="viewMode$.set(ProductViewMode.List)">
         <mat-icon>list</mat-icon>
       </button>
@@ -46,8 +52,9 @@
               selectedProductToEdit$() &&
               product.id === selectedProductToEdit$()?.id
           }"
-          [product]="product"
-          [mode]="viewMode$()"
+          [product$]="product"
+          [mode$]="viewMode$()"
+          [(filterCategory$)]="filterCategory$"
           (click)="selectedProductToEdit$()?.id === product.id ?  selectedProductToEdit$.set(undefined): selectedProductToEdit$.set(product)"
         ></app-product>
       }

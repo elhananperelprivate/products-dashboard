@@ -11,3 +11,11 @@
     transform: scale(5);
   }
 }
+
+.category-filter {
+  &:hover {
+    cursor: pointer;
+    color: #4557ed !important;
+    text-decoration: underline;
+  }
+}
