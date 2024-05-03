@@ -4,7 +4,6 @@ import {
   inject,
   input,
   model,
-  Output,
   signal,
   WritableSignal,
 } from '@angular/core';
@@ -30,6 +29,7 @@ import { RippleModule } from 'primeng/ripple';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import {InputNumberModule} from "primeng/inputnumber";
 
 @Component({
   selector: 'app-product-form',
@@ -54,6 +54,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     InputTextModule,
     InputTextareaModule,
     NgStyle,
+    InputNumberModule,
   ],
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.scss',
@@ -68,7 +69,13 @@ export class ProductFormComponent {
 
   protected productForm: FormGroup;
   protected ProductFormMode = ProductFormMode;
-  protected categories: string[] = ['Men Clothing', 'Women Clothing', 'Other'];
+  protected categories: string[] = [
+    "men's clothing",
+    "women' clothing",
+    'jewelery',
+    'electronics',
+    'furniture',
+  ];
   protected image$: WritableSignal<string> = signal('');
 
   constructor() {
@@ -91,7 +98,8 @@ export class ProductFormComponent {
         [Validators.required, Validators.maxLength(256)],
       ],
       description: [product?.description || ''],
-      category: [product?.category || ''],
+      category: [product?.category || '', Validators.required],
+      price: [product?.price || 0, [Validators.required, Validators.min(0)]],
     });
     this.image$.set(product?.image || '');
   }
@@ -109,7 +117,10 @@ export class ProductFormComponent {
 
   submitForm() {
     if (this.productForm.valid && this.image$()) {
-      const product = { ...this.product$(), ...this.productForm.value } as Product;
+      const product = {
+        ...this.product$(),
+        ...this.productForm.value,
+      } as Product;
       product.image = this.image$();
       this.store.dispatch(
         this.mode$() === ProductFormMode.Create
