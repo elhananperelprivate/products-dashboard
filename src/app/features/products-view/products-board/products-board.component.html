@@ -1,17 +1,32 @@
-<div class="w-full flex flex-col justify-start">
-  <div class="self-start py-2 w-full flex items-center justify-between">
+<div class="w-full flex flex-col justify-start gap-2">
+  <div class="self-start w-full flex items-center justify-between">
     <div class="text-gray-800 text-2xl font-medium">Management Tool</div>
     <div class="action-section flex gap-2 items-center">
-      <button mat-icon-button (click)="sidebarVisible$.set(true)">
+      <button mat-icon-button (click)="viewMode$.set(ProductViewMode.List)">
         <mat-icon>list</mat-icon>
       </button>
-      <button mat-icon-button (click)="sidebarVisible$.set(true)">
+      <button mat-icon-button (click)="viewMode$.set(ProductViewMode.Grid)">
         <mat-icon>apps</mat-icon>
       </button>
       <button mat-icon-button (click)="sidebarVisible$.set(true)">
         <mat-icon>add</mat-icon>
       </button>
     </div>
+  </div>
+
+  <div
+    class="filter-section h-[48px] w-full p-2 bg-white flex items-center justify-start"
+  >
+    <button mat-button matPrefix>
+      <mat-icon>search</mat-icon>
+    </button>
+    <input
+      type="text"
+      #inputField
+      (input)="filterQuery$.set(inputField.value)"
+      class="w-full h-full pe-2"
+      placeholder="Search By Name.."
+    />
   </div>
 
   @if (!productLoading$() && productLoaded$()) {
@@ -40,7 +55,7 @@
   <div class="footer py-2 flex items-center justify-end">
     <mat-paginator
       style="background: transparent; font-size: 16px"
-      [length]="allProducts$().length"
+      [length]="filteredProducts$().length"
       [pageSize]="pageSize$()"
       [pageSizeOptions]="pageSizeOptions"
       (page)="handlePageEvent($event)"
