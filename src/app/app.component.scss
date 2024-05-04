@@ -5,4 +5,15 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  .product-board-comp {
+    min-width: 86%;
+    height: 100%;
+    padding-top: 4%;
+
+    // if screen  height is less than 768px
+    @media (max-height: 768px) {
+      padding-top: 12px;
+    }
+  }
 }
