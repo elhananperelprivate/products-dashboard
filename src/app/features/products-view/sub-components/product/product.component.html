@@ -1,8 +1,18 @@
-<div class="flex items-center justify-start gap-2 h-full w-full p-2">
+<div
+  class="flex items-center justify-start gap-2 h-full w-full p-2"
+  [ngClass]="
+    mode$() === ProductViewMode.List ? 'flex-row' : 'flex-col justify-center'
+  "
+>
   <div
     class="image-section"
+    [pTooltip]="product$().title"
+    tooltipPosition="top"
+    [tooltipDisabled]="mode$() === ProductViewMode.List"
     [ngClass]="
-      mode$() === ProductViewMode.List ? 'h-full w-[40px]' : 'h-[60%] w-[160px]'
+      mode$() === ProductViewMode.List
+        ? 'h-full w-[40px]'
+        : 'h-[60%] w-full grid-view'
     "
   >
     @defer {
@@ -16,32 +26,43 @@
     }
   </div>
   <div
-    class="flex items-center justify-between gap-4 w-full"
+    class="flex items-center justify-between gap-4"
     [ngClass]="
-      mode$() === ProductViewMode.List ? 'flex-row ps-1' : 'flex-col h-[40%]'
+      mode$() === ProductViewMode.List
+        ? 'w-full flex-row ps-1'
+        : 'w-fit py-2 flex-col h-[40%]'
     "
   >
-    <div
-      class="text-base font-sans font-medium truncate"
-      [ngClass]="mode$() === ProductViewMode.List ? 'w-[60%]' : 'w-full'"
-      [innerHTML]="product$().title | highlightSearch: filterQuery$() || ''"
-    ></div>
-    <div
-      class="flex items-center"
-      [ngClass]="mode$() === ProductViewMode.List ? 'w-[20%]' : 'w-full'"
-    >
+    @if (mode$() === ProductViewMode.List) {
       <div
-        class="w-fit h-full category-filter"
-        (click)="
-          $event.preventDefault();
-          $event.stopPropagation();
-          filterCategory$.set(product$().category || '')
-        "
+        class="text-base font-sans font-medium truncate"
+        [ngClass]="mode$() === ProductViewMode.List ? 'w-[60%]' : 'w-full'"
+        [innerHTML]="product$().title | highlightSearch: filterQuery$() || ''"
+      ></div>
+      <div
+        class="flex items-center"
+        [ngClass]="mode$() === ProductViewMode.List ? 'w-[20%]' : 'w-full'"
       >
-        {{ product$().category }}
+        <div
+          class="w-fit h-full category-filter"
+          (click)="
+            $event.preventDefault();
+            $event.stopPropagation();
+            filterCategory$.set(product$().category || '')
+          "
+        >
+          {{ product$().category }}
+        </div>
       </div>
-    </div>
-    <div [ngClass]="mode$() === ProductViewMode.List ? 'w-[20%]' : 'w-full'">
+    }
+
+    <div
+      [ngClass]="
+        mode$() === ProductViewMode.List
+          ? 'w-[20%]'
+          : 'h-full w-full text-xl font-sans'
+      "
+    >
       {{ "$" + product$().price }}
     </div>
   </div>

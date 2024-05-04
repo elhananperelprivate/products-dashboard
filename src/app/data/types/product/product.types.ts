@@ -31,9 +31,9 @@ export const ProductCategory = {
   Jewelery: 'jewelery',
   Electronics: 'electronics',
   Furniture: 'furniture',
-  MensClothing: 'men\'s clothing',
-  WomensClothing: 'women\'s clothing',
+  MensClothing: "men's clothing",
+  WomensClothing: "women's clothing",
 };
 
-export type ProductCategory = (typeof ProductCategory)[keyof typeof ProductCategory];
-
+export type ProductCategory =
+  (typeof ProductCategory)[keyof typeof ProductCategory];

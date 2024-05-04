@@ -7,7 +7,7 @@
 
   transition: transform 0.4s ease;
 
-  &:hover {
+  &:hover:not(.grid-view) {
     transform: scale(5);
   }
 }

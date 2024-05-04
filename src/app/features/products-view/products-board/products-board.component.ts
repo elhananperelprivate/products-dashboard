@@ -24,7 +24,11 @@ import { ProductComponent, ProductFormComponent } from '../sub-components';
 import { NgClass } from '@angular/common';
 import { SidebarModule } from 'primeng/sidebar';
 import { MatIcon } from '@angular/material/icon';
-import {MatButton, MatFabButton, MatIconButton} from '@angular/material/button';
+import {
+  MatButton,
+  MatFabButton,
+  MatIconButton,
+} from '@angular/material/button';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import {
   MatFormField,
@@ -110,7 +114,6 @@ export class ProductsBoardComponent implements OnInit {
   protected selectedProductToEdit$: WritableSignal<Product | undefined> =
     signal(undefined);
 
-
   protected ProductViewMode = ProductViewMode;
   protected ProductFormMode = ProductFormMode;
 
@@ -121,13 +124,16 @@ export class ProductsBoardComponent implements OnInit {
   protected readonly ProductFormComponent = ProductFormComponent;
 
   constructor() {
-    effect(() => {
-      const filterQuery = this.filterQueryWithDebounce$();
-      const filterCategory = this.filterCategory$();
-      if (filterQuery || filterCategory) {
-        this.currentPage$.set(0);
-      }
-    }, { allowSignalWrites: true});
+    effect(
+      () => {
+        const filterQuery = this.filterQueryWithDebounce$();
+        const filterCategory = this.filterCategory$();
+        if (filterQuery || filterCategory) {
+          this.currentPage$.set(0);
+        }
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   ngOnInit(): void {
@@ -144,9 +150,8 @@ export class ProductsBoardComponent implements OnInit {
     if (mode === ProductFormMode.Create) {
       this.selectedProductToEdit$.set(undefined);
       this.sidebarVisible$.set(true);
-
-    }else if (mode === ProductFormMode.Edit && product) {
-      this.selectedProductToEdit$.set({...product});
+    } else if (mode === ProductFormMode.Edit && product) {
+      this.selectedProductToEdit$.set({ ...product });
       this.sidebarVisible$.set(true);
     }
   }

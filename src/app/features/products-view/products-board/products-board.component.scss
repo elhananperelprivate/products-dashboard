@@ -1,5 +1,4 @@
 .products-board {
-
   @media (max-width: 768px) {
     padding-inline: 5px;
     padding-top: 5px;
@@ -23,9 +22,9 @@
     &.grid-view {
       display: grid;
       // 5 columns
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       // gap between columns
-      gap: 4px;
+      gap: 8px;
     }
 
     .product-item {
@@ -54,6 +53,12 @@
       }
 
       &.grid-view {
+        display: flex;
+        flex-direction: column;
+        justify-content: stretch;
+        padding: 8px;
+        height: 220px;
+        width: 100%;
       }
     }
   }
