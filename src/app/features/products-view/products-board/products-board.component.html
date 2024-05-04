@@ -35,7 +35,7 @@
     />
   </div>
 
-  @if (!productLoading$() && productLoaded$()) {
+  @if (productLoaded$()) {
     <div
       class="products-view w-full"
       [ngClass]="
@@ -55,6 +55,7 @@
           [product$]="product"
           [mode$]="viewMode$()"
           [filterQuery$]="filterQueryWithDebounce$()"
+          [loading$]="productLoading$()"
           [(filterCategory$)]="filterCategory$"
           (click)="
             selectedProductToEdit$()?.id === product.id
@@ -64,15 +65,16 @@
         ></app-product>
       }
     </div>
-  } @else {
-    @for (_ of [].constructor(pageSize$()); track _) {
-      <p-skeleton
-        class="p-1"
-        [width]="viewMode$() === ProductViewMode.List ? '100%' : '160px'"
-        height="48px"
-      ></p-skeleton>
-    }
   }
+<!--  } @else {-->
+<!--    @for (_ of [].constructor(pageSize$()); track _) {-->
+<!--      <p-skeleton-->
+<!--        class="p-1"-->
+<!--        [width]="viewMode$() === ProductViewMode.List ? '100%' : '160px'"-->
+<!--        height="48px"-->
+<!--      ></p-skeleton>-->
+<!--    }-->
+
   <div class="footer py-2 flex items-center justify-end">
     <mat-paginator
       style="background: transparent; font-size: 16px"

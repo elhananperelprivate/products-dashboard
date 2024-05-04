@@ -134,6 +134,15 @@ export class ProductsBoardComponent implements OnInit {
       },
       { allowSignalWrites: true },
     );
+    effect(
+      () => {
+       const sidebarVisible = this.sidebarVisible$();
+        if (!sidebarVisible && this.selectedProductToEdit$()) {
+          this.selectedProductToEdit$.set(undefined);
+        }
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   ngOnInit(): void {
