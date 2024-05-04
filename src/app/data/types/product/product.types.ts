@@ -3,7 +3,7 @@ export interface Product {
   title: string;
   price: number;
   description?: string;
-  category?: string;
+  category?: ProductCategory;
   image: string;
   rating?: {
     rate: number;
@@ -34,4 +34,6 @@ export const ProductCategory = {
   MensClothing: 'men\'s clothing',
   WomensClothing: 'women\'s clothing',
 };
+
+export type ProductCategory = (typeof ProductCategory)[keyof typeof ProductCategory];
 

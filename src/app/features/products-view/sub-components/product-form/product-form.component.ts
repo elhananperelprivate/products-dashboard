@@ -8,7 +8,7 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { Product, productActions, ProductFormMode } from '../../../../data';
+import {Product, productActions, ProductCategory, ProductFormMode} from '../../../../data';
 import {
   FormBuilder,
   FormGroup,
@@ -70,13 +70,8 @@ export class ProductFormComponent implements OnInit {
 
   protected productForm: FormGroup;
   protected ProductFormMode = ProductFormMode;
-  protected categories: string[] = [
-    "men's clothing",
-    "women' clothing",
-    'jewelery',
-    'electronics',
-    'furniture',
-  ];
+
+  protected categories: string[] = Object.values(ProductCategory);
   protected image$: WritableSignal<string> = signal('');
 
   protected isMobile$: WritableSignal<boolean> = signal(false);
