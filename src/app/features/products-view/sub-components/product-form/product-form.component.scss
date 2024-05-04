@@ -23,4 +23,19 @@
   }
 }
 
+.input-field::ng-deep {
+  .p-inputnumber {
+    width: --webkit-fill-available;
+    display: contents;
 
+    .p-inputnumber-input {
+      padding-inline-start: 12px !important;
+    }
+  }
+
+  .p-dropdown {
+    width: --webkit-fill-available;
+    display: flex;
+    min-width: 280px;
+  }
+}

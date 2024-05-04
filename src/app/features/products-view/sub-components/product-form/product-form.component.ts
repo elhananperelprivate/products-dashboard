@@ -86,8 +86,13 @@ export class ProductFormComponent implements OnInit {
       () => {
         const mode = this.mode$();
         const productToUpdate = this.product$();
-        if (mode) {
-          this.initForm(productToUpdate);
+        const sideNavOpen = this.sideNavOpen$();
+        if (sideNavOpen) {
+          if (mode && mode === ProductFormMode.Create) {
+            this.initForm();
+          } else if (mode && mode === ProductFormMode.Edit) {
+            this.initForm(productToUpdate);
+          }
         }
       },
       { allowSignalWrites: true },
@@ -143,7 +148,9 @@ export class ProductFormComponent implements OnInit {
   deleteProduct() {
     const productId = this.product$()?.id;
     if (productId) {
-      const result = window.confirm('Are you sure you want to delete this product?');
+      const result = window.confirm(
+        'Are you sure you want to delete this product?',
+      );
       // Check if the user clicked OK
       if (result) {
         this.store.dispatch(productActions.deleteProduct({ productId }));

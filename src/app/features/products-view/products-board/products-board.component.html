@@ -14,7 +14,7 @@
       <button mat-icon-button (click)="viewMode$.set(ProductViewMode.Grid)">
         <mat-icon>apps</mat-icon>
       </button>
-      <button mat-icon-button (click)="sidebarVisible$.set(true)">
+      <button mat-icon-button (click)="openProductForm(ProductFormMode.Create)">
         <mat-icon>add</mat-icon>
       </button>
     </div>
@@ -58,7 +58,7 @@
           (click)="
             selectedProductToEdit$()?.id === product.id
               ? selectedProductToEdit$.set(undefined)
-              : selectedProductToEdit$.set(product)
+              : openProductForm(ProductFormMode.Edit, product)
           "
         ></app-product>
       }
@@ -98,13 +98,18 @@
     'background-color': 'rgb(234,237,239)'
   }"
 >
-  @defer (when sidebarVisible$()) {
-    <app-product-form
-      [product$]="selectedProductToEdit$()"
-      [mode$]="
-        selectedProductToEdit$() ? ProductFormMode.Edit : ProductFormMode.Create
-      "
-      [(sideNavOpen$)]="sidebarVisible$"
-    ></app-product-form>
+  @defer (when sidebarVisible$() && productFormMode$()) {
+    @if (productFormMode$() === ProductFormMode.Create) {
+      <app-product-form
+        [mode$]="ProductFormMode.Create"
+        [(sideNavOpen$)]="sidebarVisible$"
+      ></app-product-form>
+    } @else {
+      <app-product-form
+        [mode$]="ProductFormMode.Edit"
+        [(sideNavOpen$)]="sidebarVisible$"
+        [product$]="selectedProductToEdit$()"
+      ></app-product-form>
+    }
   }
 </p-sidebar>

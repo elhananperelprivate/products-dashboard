@@ -110,24 +110,17 @@ export class ProductsBoardComponent implements OnInit {
   protected selectedProductToEdit$: WritableSignal<Product | undefined> =
     signal(undefined);
 
+
   protected ProductViewMode = ProductViewMode;
   protected ProductFormMode = ProductFormMode;
 
   protected sidebarVisible$ = signal(false);
+  protected productFormMode$ = signal(ProductFormMode.Create);
+
   pageSizeOptions: number[] = [5, 10];
+  protected readonly ProductFormComponent = ProductFormComponent;
 
   constructor() {
-    effect(
-      () => {
-        const selectedProduct = this.selectedProductToEdit$();
-        if (selectedProduct) {
-          this.sidebarVisible$.set(true);
-        } else {
-          this.sidebarVisible$.set(false);
-        }
-      },
-      { allowSignalWrites: true },
-    );
     effect(() => {
       const filterQuery = this.filterQueryWithDebounce$();
       const filterCategory = this.filterCategory$();
@@ -146,5 +139,15 @@ export class ProductsBoardComponent implements OnInit {
     this.currentPage$.set(e.pageIndex);
   }
 
-  protected readonly ProductFormComponent = ProductFormComponent;
+  openProductForm(mode: ProductFormMode, product?: Product) {
+    this.productFormMode$.set(mode);
+    if (mode === ProductFormMode.Create) {
+      this.selectedProductToEdit$.set(undefined);
+      this.sidebarVisible$.set(true);
+
+    }else if (mode === ProductFormMode.Edit && product) {
+      this.selectedProductToEdit$.set({...product});
+      this.sidebarVisible$.set(true);
+    }
+  }
 }
