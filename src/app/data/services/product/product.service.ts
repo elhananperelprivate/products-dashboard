@@ -28,4 +28,8 @@ export class ProductService {
   updateProduct(product: Product): Observable<Product> {
     return of(product).pipe(delay(2000));
   }
+
+  deleteProduct(productId: number) {
+    return of(productId).pipe(delay(2000));
+  }
 }

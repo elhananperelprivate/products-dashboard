@@ -1,4 +1,4 @@
-<div class="w-full flex flex-col justify-start gap-2">
+<div class="products-board w-full flex flex-col justify-start gap-2">
   <div class="self-start w-full flex items-center justify-between">
     <div class="text-gray-800 text-2xl font-medium">Management Tool</div>
     <div class="action-section flex gap-2 items-center">
@@ -37,7 +37,7 @@
 
   @if (!productLoading$() && productLoaded$()) {
     <div
-      class="products-board w-full"
+      class="products-view w-full"
       [ngClass]="
         viewMode$() === ProductViewMode.List ? 'list-view' : 'grid-view'
       "
@@ -85,7 +85,7 @@
   [visible]="sidebarVisible$()"
   (visibleChange)="sidebarVisible$.set($event);  !$event ? selectedProductToEdit$.set(undefined) : null"
   [position]="'right'"
-  [style]="{ width: '30%', 'background-color': 'rgb(234,237,239)' }"
+  [style]="{ 'width': 'fit-content', 'max-width': '85%','background-color': 'rgb(234,237,239)' }"
 >
   <app-product-form
     [product$]="selectedProductToEdit$()"

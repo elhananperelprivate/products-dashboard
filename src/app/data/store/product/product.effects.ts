@@ -58,4 +58,18 @@ export class ProductEffects {
       ),
     ),
   );
+
+  deleteProduct$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(productActions.deleteProduct),
+      exhaustMap(({ productId }) =>
+        this.productService.deleteProduct(productId).pipe(
+          map(() => productActions.deleteProductSuccess({ productId })),
+          catchError((error) =>
+            of(productActions.deleteProductFailure({ error })),
+          ),
+        ),
+      ),
+    ),
+  );
 }

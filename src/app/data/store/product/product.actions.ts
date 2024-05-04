@@ -25,10 +25,10 @@ const addProductEvents = {
 
 const deleteProductEvents = {
   deleteProduct: props<{
-    productId: string;
+    productId: number;
   }>(),
   deleteProductSuccess: props<{
-    productId: string;
+    productId: number;
   }>(),
   deleteProductFailure: props<{
     error: Error;

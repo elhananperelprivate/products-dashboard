@@ -30,7 +30,14 @@
         ></textarea>
       </div>
 
-      <div class="flex gap-2 items-center justify-center w-full">
+      <div
+        class="flex gap-2 w-full"
+        [ngClass]="
+          isMobile$()
+            ? 'flex-col justify-start items-start'
+            : 'flex-row justify-center items-center'
+        "
+      >
         <mat-label class="w-fit text-lg whitespace-nowrap"
           >Select Category</mat-label
         >
@@ -43,7 +50,14 @@
         />
       </div>
 
-      <div class="flex  gap-2 w-full items-center">
+      <div
+        class="flex gap-2 w-full"
+        [ngClass]="
+          isMobile$()
+            ? 'flex-col justify-start items-start'
+            : 'flex-row justify-center items-center gap-2'
+        "
+      >
         <mat-label class="text-lg">Price</mat-label>
         <p-inputNumber
           formControlName="price"
@@ -51,7 +65,8 @@
           mode="currency"
           currency="USD"
           locale="en-US"
-          class="w-full h-[44px] p-2 text-xl text-gray-800"
+          [ngStyle]="{ width: '--webkit-fill-available' }"
+          class="w-full h-[44px] text-xl text-gray-800"
         />
       </div>
 
@@ -96,7 +111,15 @@
           style="display: none"
         />
       </div>
-      <div class="self-center w-fit">
+      <div class="flex justify-between w-full pt-6">
+        <button
+          mat-stroked-button
+          (click)="sideNavOpen$.set(false); mode$() === ProductFormMode.Edit ? deleteProduct() : null"
+          [color]="mode$() === ProductFormMode.Edit ? 'warn' : 'primary'"
+          class="px-[32px] py-[18px] text-lg shadow-2"
+        >
+          {{ mode$() === ProductFormMode.Edit ? "Delete Product" : "Cancel" }}
+        </button>
         <button
           mat-raised-button
           [disabled]="productForm.invalid || !image$()"

@@ -4,6 +4,7 @@ import {
   inject,
   input,
   model,
+  OnInit,
   signal,
   WritableSignal,
 } from '@angular/core';
@@ -29,7 +30,7 @@ import { RippleModule } from 'primeng/ripple';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import {InputNumberModule} from "primeng/inputnumber";
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-product-form',
@@ -59,7 +60,7 @@ import {InputNumberModule} from "primeng/inputnumber";
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.scss',
 })
-export class ProductFormComponent {
+export class ProductFormComponent implements OnInit {
   private fb: FormBuilder = inject(FormBuilder);
   private store: Store = inject(Store);
 
@@ -78,6 +79,8 @@ export class ProductFormComponent {
   ];
   protected image$: WritableSignal<string> = signal('');
 
+  protected isMobile$: WritableSignal<boolean> = signal(false);
+
   constructor() {
     effect(
       () => {
@@ -89,6 +92,12 @@ export class ProductFormComponent {
       },
       { allowSignalWrites: true },
     );
+  }
+
+  ngOnInit() {
+    if (window.innerWidth < 768) {
+      this.isMobile$.set(true);
+    }
   }
 
   initForm(product?: Product) {
@@ -128,6 +137,17 @@ export class ProductFormComponent {
           : productActions.updateProduct({ product }),
       );
       this.sideNavOpen$.set(false);
+    }
+  }
+
+  deleteProduct() {
+    const productId = this.product$()?.id;
+    if (productId) {
+      const result = window.confirm('Are you sure you want to delete this product?');
+      // Check if the user clicked OK
+      if (result) {
+        this.store.dispatch(productActions.deleteProduct({ productId }));
+      }
     }
   }
 }
