@@ -2,7 +2,7 @@
   <div class="self-start w-full flex items-center justify-between">
     <div class="text-gray-800 text-2xl font-medium">Management Tool</div>
     <div class="action-section flex gap-2 items-center">
-      @if(filterCategory$()){
+      @if (filterCategory$()) {
         <button (click)="filterCategory$.set('')" mat-stroked-button>
           <mat-icon>close</mat-icon>
           {{ filterCategory$() }}
@@ -48,14 +48,18 @@
           [ngClass]="{
             'list-view': viewMode$() === ProductViewMode.List,
             'grid-view': viewMode$() !== ProductViewMode.List,
-            'selected':
+            selected:
               selectedProductToEdit$() &&
               product.id === selectedProductToEdit$()?.id
           }"
           [product$]="product"
           [mode$]="viewMode$()"
           [(filterCategory$)]="filterCategory$"
-          (click)="selectedProductToEdit$()?.id === product.id ?  selectedProductToEdit$.set(undefined): selectedProductToEdit$.set(product)"
+          (click)="
+            selectedProductToEdit$()?.id === product.id
+              ? selectedProductToEdit$.set(undefined)
+              : selectedProductToEdit$.set(product)
+          "
         ></app-product>
       }
     </div>
@@ -83,13 +87,24 @@
 
 <p-sidebar
   [visible]="sidebarVisible$()"
-  (visibleChange)="sidebarVisible$.set($event);  !$event ? selectedProductToEdit$.set(undefined) : null"
+  (visibleChange)="
+    sidebarVisible$.set($event);
+    !$event ? selectedProductToEdit$.set(undefined) : null
+  "
   [position]="'right'"
-  [style]="{ 'width': 'fit-content', 'max-width': '85%','background-color': 'rgb(234,237,239)' }"
+  [style]="{
+    width: 'fit-content',
+    'max-width': '85%',
+    'background-color': 'rgb(234,237,239)'
+  }"
 >
-  <app-product-form
-    [product$]="selectedProductToEdit$()"
-    [mode$]="selectedProductToEdit$() ? ProductFormMode.Edit : ProductFormMode.Create"
-    [(sideNavOpen$)]="sidebarVisible$"
-  ></app-product-form>
+  @defer (when sidebarVisible$()) {
+    <app-product-form
+      [product$]="selectedProductToEdit$()"
+      [mode$]="
+        selectedProductToEdit$() ? ProductFormMode.Edit : ProductFormMode.Create
+      "
+      [(sideNavOpen$)]="sidebarVisible$"
+    ></app-product-form>
+  }
 </p-sidebar>
