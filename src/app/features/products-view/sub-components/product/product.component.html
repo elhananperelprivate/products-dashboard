@@ -24,18 +24,22 @@
     <div
       class="text-base font-sans font-medium truncate"
       [ngClass]="mode$() === ProductViewMode.List ? 'w-[60%]' : 'w-full'"
-    >
-      {{ product$().title }}
-    </div>
+      [innerHTML]="product$().title | highlightSearch: filterQuery$() || ''"
+    ></div>
     <div
       class="flex items-center"
       [ngClass]="mode$() === ProductViewMode.List ? 'w-[20%]' : 'w-full'"
     >
       <div
-        class=" w-fit h-full category-filter"
-        (click)="$event.preventDefault(); $event.stopPropagation(); filterCategory$.set(product$().category || '')"
-
-      >{{ product$().category }}</div>
+        class="w-fit h-full category-filter"
+        (click)="
+          $event.preventDefault();
+          $event.stopPropagation();
+          filterCategory$.set(product$().category || '')
+        "
+      >
+        {{ product$().category }}
+      </div>
     </div>
     <div [ngClass]="mode$() === ProductViewMode.List ? 'w-[20%]' : 'w-full'">
       {{ "$" + product$().price }}

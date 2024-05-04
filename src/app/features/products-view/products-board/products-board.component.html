@@ -54,6 +54,7 @@
           }"
           [product$]="product"
           [mode$]="viewMode$()"
+          [filterQuery$]="filterQueryWithDebounce$()"
           [(filterCategory$)]="filterCategory$"
           (click)="
             selectedProductToEdit$()?.id === product.id
