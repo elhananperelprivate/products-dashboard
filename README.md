@@ -1,27 +1,38 @@
-# AngaulrTempalate
+# Products Dashboard
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.1.2.
+![Product Dashboard](src/assets/images/README/screenshot.png)
 
-## Development server
+## Overview
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+This Angular project is a Products Dashboard that allows users to perform simple CRUD operations on a list/grid view of products. Products are fetched from a free API called [Fake Store API](https://fakestoreapi.com/products). The project utilizes Angular, Angular Material, NgRx for state management, and RxJS for handling asynchronous operations.
 
-## Code scaffolding
+## Features
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- View products in list or grid layout
+- Add new products
+- Edit existing products
+- Delete products
+- Toggle between list and grid view
+- Local storage for storing fetched products (reset on refresh)
 
-## Build
+## Installation
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+1. Clone the repository:
 
-## Running unit tests
+   ```bash
+   git clone https://github.com/your-username/products-dashboard.git
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+2. Navigate to the project directory:
+   ```bash
+   cd products-dashboard
+   
+3. Install dependencies:
+   ```bash
+   npm install
 
-## Running end-to-end tests
+4. Run The Project
+   ```bash
+   ng serve
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+5. Open your browser and navigate to [LocalHost](http://localhost:4200/) to view the application.
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
