@@ -7,9 +7,6 @@ export const productAdapter: EntityAdapter<IProductEntity> =
     selectId: (product: IProductEntity) => {
       return product?.id;
     },
-    // sort by name in ascending order
-    sortComparer: (a: IProductEntity, b: IProductEntity) =>
-      a.title.localeCompare(b.title),
   });
 
 export namespace ProductStore {

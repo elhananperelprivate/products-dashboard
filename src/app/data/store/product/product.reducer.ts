@@ -4,6 +4,7 @@ import { productActions } from './product.actions';
 import { StoreNameType } from '../../types';
 import IProductState = ProductStore.IProductState;
 import productInitialState = ProductStore.productInitialState;
+import {selectAll} from "./product.selectors";
 
 export const productFeature = createFeature({
   name: StoreNameType.PRODUCT_FEATURE_KEY,
@@ -33,11 +34,8 @@ export const productFeature = createFeature({
       loading: true,
     })),
     on(productActions.addProductSuccess, (state, { product }) => {
-      return productAdapter.addOne(product, {
-        ...state,
-        loading: false,
-        loaded: true,
-      });
+      const temp  = [ product, ...selectAll(state) ] ;
+      return productAdapter.setAll([...temp], {...state, loading: false, loaded: true});
     }),
     on(productActions.addProductFailure, (state, { error }) => ({
       ...state,

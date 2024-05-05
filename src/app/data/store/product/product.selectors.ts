@@ -7,7 +7,7 @@ export const selectProductState = createFeatureSelector<IProductState>(
   StoreNameType.PRODUCT_FEATURE_KEY,
 );
 
-const { selectAll, selectEntities } = productAdapter.getSelectors();
+export const { selectAll, selectEntities } = productAdapter.getSelectors();
 
 export const selectAllProducts = createSelector(
   selectProductState,

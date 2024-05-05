@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { delay, Observable, of } from 'rxjs';
 import { Product } from '../../types';
 import { Store } from '@ngrx/store';
-import { selectProductsLength } from '../../store';
+import {selectAllProducts, selectProductsLength} from '../../store';
+import {getUniqueProductId} from "../../utils";
 
 @Injectable({
   providedIn: 'root',
@@ -21,8 +22,8 @@ export class ProductService {
   }
 
   addProduct(product: Product): Observable<Product> {
-    const productsLength = this.store.selectSignal(selectProductsLength)();
-    return of({ ...product, id: productsLength + 1 }).pipe(delay(2000));
+    const uniqueProductId = getUniqueProductId(this.store.selectSignal(selectAllProducts)());
+    return of({ ...product, id: uniqueProductId }).pipe(delay(2000));
   }
 
   updateProduct(product: Product): Observable<Product> {
