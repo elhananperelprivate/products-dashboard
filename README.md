@@ -20,7 +20,7 @@ This Angular project is a Products Dashboard that allows users to perform simple
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/products-dashboard.git
+   git clone https://github.com/elhananperelprivate/products-dashboard.git
 
 2. Navigate to the project directory:
    ```bash
