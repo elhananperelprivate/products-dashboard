@@ -73,7 +73,8 @@
     >
       @for (_ of [].constructor(pageSize$()); track _) {
         <p-skeleton
-          class="product-skeleton"
+          [height]="viewMode$() === ProductViewMode.List ? '48px' : '228px'"
+          [width]="'100%'"
           [ngClass]="{
           'list-view': viewMode$() === ProductViewMode.List,
           'grid-view': viewMode$() !== ProductViewMode.List
