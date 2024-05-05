@@ -35,7 +35,7 @@
     />
   </div>
 
-  @if (productLoaded$()) {
+  @if (!productLoading$() && productLoaded$()) {
     <div
       class="products-view w-full"
       [ngClass]="
@@ -55,7 +55,6 @@
           [product$]="product"
           [mode$]="viewMode$()"
           [filterQuery$]="filterQueryWithDebounce$()"
-          [loading$]="productLoading$()"
           [(filterCategory$)]="filterCategory$"
           (click)="
             selectedProductToEdit$()?.id === product.id
@@ -65,15 +64,26 @@
         ></app-product>
       }
     </div>
+  } @else {
+    <div
+      class="products-view w-full"
+      [ngClass]="
+        viewMode$() === ProductViewMode.List ? 'list-view' : 'grid-view'
+      "
+    >
+      @for (_ of [].constructor(pageSize$()); track _) {
+        <p-skeleton
+          class="product-skeleton"
+          [ngClass]="{
+          'list-view': viewMode$() === ProductViewMode.List,
+          'grid-view': viewMode$() !== ProductViewMode.List
+        }"
+          [shape]="viewMode$() === ProductViewMode.List ? 'rectangle' : 'square'"
+        ></p-skeleton>
+      }
+    </div>
+
   }
-<!--  } @else {-->
-<!--    @for (_ of [].constructor(pageSize$()); track _) {-->
-<!--      <p-skeleton-->
-<!--        class="p-1"-->
-<!--        [width]="viewMode$() === ProductViewMode.List ? '100%' : '160px'"-->
-<!--        height="48px"-->
-<!--      ></p-skeleton>-->
-<!--    }-->
 
   <div class="footer py-2 flex items-center justify-end">
     <mat-paginator

@@ -22,7 +22,6 @@ export class ProductComponent {
   product$ = input.required<Product>();
   mode$ = input.required<ProductViewMode>();
   filterQuery$ = input.required<string>();
-  loading$ = input.required<boolean>();
 
   filterCategory$ = model.required<string>();
 

@@ -4,71 +4,66 @@
     mode$() === ProductViewMode.List ? 'flex-row' : 'flex-col justify-center'
   "
 >
-  @if(!loading$()){
-    <div
-      class="image-section"
-      [pTooltip]="product$().title"
-      tooltipPosition="top"
-      [tooltipDisabled]="mode$() === ProductViewMode.List"
-      [ngClass]="
+  <div
+    class="image-section"
+    [pTooltip]="product$().title"
+    tooltipPosition="top"
+    [tooltipDisabled]="mode$() === ProductViewMode.List"
+    [ngClass]="
       mode$() === ProductViewMode.List
         ? 'h-full w-[40px]'
         : 'h-[60%] w-full grid-view'
     "
-    >
-      @defer {
-        <img
-          [src]="product$().image"
-          alt="{{ product$().title }}"
-          class="product-image"
-        />
-      } @placeholder {
-        <p-skeleton class="h-full w-full" [shape]="'square'"></p-skeleton>
-      }
-    </div>
-    <div
-      class="flex items-center justify-between gap-4"
-      [ngClass]="
+  >
+    @defer {
+      <img
+        [src]="product$().image"
+        alt="{{ product$().title }}"
+        class="product-image"
+      />
+    } @placeholder {
+      <p-skeleton class="h-full w-full" [shape]="'square'"></p-skeleton>
+    }
+  </div>
+  <div
+    class="flex items-center justify-between gap-4"
+    [ngClass]="
       mode$() === ProductViewMode.List
         ? 'w-full flex-row ps-1'
         : 'w-fit py-2 flex-col h-[40%]'
     "
-    >
-      @if (mode$() === ProductViewMode.List) {
+  >
+    @if (mode$() === ProductViewMode.List) {
+      <div
+        class="text-base font-sans font-medium truncate"
+        [ngClass]="mode$() === ProductViewMode.List ? 'w-[60%]' : 'w-full'"
+        [innerHTML]="product$().title | highlightSearch: filterQuery$() || ''"
+      ></div>
+      <div
+        class="flex items-center"
+        [ngClass]="mode$() === ProductViewMode.List ? 'w-[20%]' : 'w-full'"
+      >
         <div
-          class="text-base font-sans font-medium truncate"
-          [ngClass]="mode$() === ProductViewMode.List ? 'w-[60%]' : 'w-full'"
-          [innerHTML]="product$().title | highlightSearch: filterQuery$() || ''"
-        ></div>
-        <div
-          class="flex items-center"
-          [ngClass]="mode$() === ProductViewMode.List ? 'w-[20%]' : 'w-full'"
-        >
-          <div
-            class="w-fit h-full category-filter"
-            (click)="
+          class="w-fit h-full category-filter"
+          (click)="
             $event.preventDefault();
             $event.stopPropagation();
             filterCategory$.set(product$().category || '')
           "
-          >
-            {{ product$().category }}
-          </div>
+        >
+          {{ product$().category }}
         </div>
-      }
+      </div>
+    }
 
-      <div
-        [ngClass]="
+    <div
+      [ngClass]="
         mode$() === ProductViewMode.List
           ? 'w-[20%]'
           : 'h-full w-full text-xl font-sans'
       "
-      >
-        {{ "$" + product$().price }}
-      </div>
+    >
+      {{ "$" + product$().price }}
     </div>
-  } @else {
-    <p-skeleton class="w-full h-full" [shape]="'rectangle'"></p-skeleton>
-  }
-
+  </div>
 </div>
