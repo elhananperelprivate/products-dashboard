@@ -44,10 +44,10 @@
     >
       @for (product of productsToShow$(); track product) {
         <div
-          class="product-item flex items-center justify-between relative"
+          class="product-item flex items-center justify-between"
           [ngClass]="{
             'list-view': viewMode$() === ProductViewMode.List,
-            'grid-view': viewMode$() !== ProductViewMode.List,
+            'grid-view relative': viewMode$() !== ProductViewMode.List,
             selected:
               selectedProductToEdit$() &&
               product.id === selectedProductToEdit$()?.id
