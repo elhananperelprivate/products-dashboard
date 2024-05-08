@@ -44,7 +44,7 @@
     >
       @for (product of productsToShow$(); track product) {
         <div
-          class="product-item flex items-center justify-between"
+          class="product-item flex items-center justify-between relative"
           [ngClass]="{
             'list-view': viewMode$() === ProductViewMode.List,
             'grid-view': viewMode$() !== ProductViewMode.List,
@@ -60,7 +60,14 @@
             [filterQuery$]="filterQueryWithDebounce$()"
             [(filterCategory$)]="filterCategory$"
           ></app-product>
-          <div class="product-actions pe-5">
+          <div
+            class="product-actions"
+            [ngClass]="
+              viewMode$() === ProductViewMode.List
+                ? ' pe-5'
+                : 'absolute right-1'
+            "
+          >
             <button
               mat-icon-button
               class="flex items-center p-2"
