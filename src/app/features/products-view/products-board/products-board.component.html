@@ -43,8 +43,8 @@
       "
     >
       @for (product of productsToShow$(); track product) {
-        <app-product
-          class="product-item"
+        <div
+          class="product-item flex items-center justify-between"
           [ngClass]="{
             'list-view': viewMode$() === ProductViewMode.List,
             'grid-view': viewMode$() !== ProductViewMode.List,
@@ -52,16 +52,28 @@
               selectedProductToEdit$() &&
               product.id === selectedProductToEdit$()?.id
           }"
-          [product$]="product"
-          [mode$]="viewMode$()"
-          [filterQuery$]="filterQueryWithDebounce$()"
-          [(filterCategory$)]="filterCategory$"
-          (click)="
-            selectedProductToEdit$()?.id === product.id
-              ? selectedProductToEdit$.set(undefined)
-              : openProductForm(ProductFormMode.Edit, product)
-          "
-        ></app-product>
+        >
+          <app-product
+            class="w-full h-full"
+            [product$]="product"
+            [mode$]="viewMode$()"
+            [filterQuery$]="filterQueryWithDebounce$()"
+            [(filterCategory$)]="filterCategory$"
+          ></app-product>
+          <div class="product-actions pe-5">
+            <button
+              mat-icon-button
+              class="flex items-center p-2"
+              (click)="
+                selectedProductToEdit$()?.id === product.id
+                  ? selectedProductToEdit$.set(undefined)
+                  : openProductForm(ProductFormMode.Edit, product)
+              "
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </div>
       }
     </div>
   } @else {
@@ -76,14 +88,15 @@
           [height]="viewMode$() === ProductViewMode.List ? '48px' : '228px'"
           [width]="'100%'"
           [ngClass]="{
-          'list-view': viewMode$() === ProductViewMode.List,
-          'grid-view': viewMode$() !== ProductViewMode.List
-        }"
-          [shape]="viewMode$() === ProductViewMode.List ? 'rectangle' : 'square'"
+            'list-view': viewMode$() === ProductViewMode.List,
+            'grid-view': viewMode$() !== ProductViewMode.List
+          }"
+          [shape]="
+            viewMode$() === ProductViewMode.List ? 'rectangle' : 'square'
+          "
         ></p-skeleton>
       }
     </div>
-
   }
 
   <div class="footer py-2 flex items-center justify-end">

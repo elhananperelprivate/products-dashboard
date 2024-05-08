@@ -33,12 +33,20 @@
       box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
       transition: border 0.1s ease-in;
 
+      .product-actions {
+        opacity: 0;
+      }
+
       &:active {
         background: #e5ecf3 !important;
       }
 
       &:hover {
         border: #6383cd 1px solid;
+
+        .product-actions {
+          opacity: 1;
+        }
       }
 
       &.selected {
